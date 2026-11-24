@@ -1,0 +1,32 @@
+@model InstructorInfoSystem.Models.Instructor
+
+@{
+    ViewData["Title"] = "Instructor Details";
+}
+
+<div class="container" style="max-width: 720px;">
+    <div class="card overflow-hidden">
+        <div class="form-card-header">
+            <h4 class="mb-0 fw-bold">@Model.FullName</h4>
+            <small class="text-muted">@Model.Designation</small>
+        </div>
+
+        <div class="card-body p-4">
+            <div class="detail-row"><span class="label">Full Name</span><span class="value">@Model.FullName</span></div>
+            <div class="detail-row"><span class="label">Age</span><span class="value">@Model.Age</span></div>
+            <div class="detail-row"><span class="label">Address</span><span class="value">@Model.Address</span></div>
+            <div class="detail-row"><span class="label">Designation</span><span class="value">@Model.Designation</span></div>
+            <div class="detail-row"><span class="label">Gender</span><span class="value">@Model.Gender</span></div>
+            <div class="detail-row"><span class="label">Contact Number</span><span class="value">@Model.ContactNumber</span></div>
+            <div class="detail-row"><span class="label">Majorship</span><span class="value">@Model.Majorship</span></div>
+            <div class="detail-row"><span class="label">Bachelor Degree</span><span class="value">@Model.BachelorDegree</span></div>
+            <div class="detail-row"><span class="label">E-mail Address</span><span class="value">@Model.Email</span></div>
+
+            <div class="d-flex flex-wrap gap-2 mt-4">
+                <a href="mailto:@Model.Email" class="btn btn-secondary">Compose</a>
+                <a asp-action="Edit" asp-route-id="@Model.InstructorId" class="btn btn-solid-edit">Edit</a>
+                <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,112 @@
+@{
+    var isAuth = User.Identity?.IsAuthenticated == true;
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+    var action = ViewContext.RouteData.Values["action"]?.ToString();
+    var navFirst = User.FindFirst("FirstName")?.Value ?? "";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - Instructor Information System</title>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body class="@(isAuth ? "has-sidebar" : "")">
+
+    @if (isAuth)
+    {
+        <!-- LEFT SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-brand-row">
+                <a asp-controller="Home" asp-action="Index" class="sidebar-brand">
+                    <span class="brand-mark"><i class="bi bi-mortarboard-fill"></i></span>
+                    <span class="brand-copy">Instructor <small>Information System</small></span>
+                </a>
+                <button type="button" id="sidebarToggle" class="sidebar-toggle" aria-label="Collapse navigation" title="Collapse navigation">
+                    <i class="bi bi-layout-sidebar-inset"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a asp-controller="Home" asp-action="Index"
+                   class="@(controller == "Home" ? "active" : "")">
+                    <i class="bi bi-grid"></i><span>Dashboard</span>
+                </a>
+
+                <a asp-controller="Instructors" asp-action="Index"
+                   class="@(controller == "Instructors" ? "active" : "")">
+                    <i class="bi bi-people"></i><span>Instructors</span>
+                </a>
+
+                <a asp-controller="Account" asp-action="Profile"
+                   class="@(controller == "Account" && action == "Profile" ? "active" : "")">
+                    <i class="bi bi-person"></i><span>My Profile</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <span class="user-avatar"><i class="bi bi-person-fill"></i></span>
+                    <span class="sidebar-user-copy"><small>Welcome,</small><strong>@navFirst</strong></span>
+                </div>
+
+                <form asp-controller="Account" asp-action="Logout" method="post">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="nav-button">
+                        <i class="bi bi-box-arrow-right"></i><span>Logout</span>
+                    </button>
+                </form>
+            </div>
+        </aside>
+    }
+    else
+    {
+        <!-- TOP BAR FOR LOGIN / REGISTER -->
+        <header class="site-header">
+            <a asp-controller="Account" asp-action="Login" class="site-brand">
+                <span class="brand-mark"><i class="bi bi-mortarboard-fill"></i></span>
+                <span>Instructor Information System</span>
+            </a>
+            <nav class="site-nav">
+                <a asp-controller="Account" asp-action="Login"
+                   class="@(action == "Login" ? "active" : "")">Login</a>
+                <a asp-controller="Account" asp-action="Register"
+                   class="@(action == "Register" ? "active" : "")">Register</a>
+            </nav>
+        </header>
+    }
+
+    <div class="content-wrap">
+        <div class="content-toolbar">
+            <span class="toolbar-caption">Instructor Information System</span>
+            <button type="button" id="themeToggle" class="theme-toggle" aria-label="Switch to dark mode" aria-pressed="false">
+                <span class="theme-icon-wrap" aria-hidden="true"><i class="theme-icon bi bi-moon-stars-fill"></i></span>
+                <span class="theme-label">Dark mode</span>
+            </button>
+        </div>
+        <main class="main-content">
+            @RenderBody()
+        </main>
+
+        <footer class="site-footer">
+            <p class="mb-0">&copy; @DateTime.Now.Year - Information System</p>
+        </footer>
+    </div>
+
+    @if (TempData["Message"] is string message)
+    {
+        <div data-popup-message="@message" hidden></div>
+    }
+
+    <script src="~/js/site.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
